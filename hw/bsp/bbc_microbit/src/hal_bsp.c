@@ -26,6 +26,7 @@
 #include "mcu/nrf51_hal.h"
 #include "hal/hal_bsp.h"
 #include "hal/hal_gpio.h"
+#include "hal/hal_i2c.h"
 #include "os/os_cputime.h"
 #include "syscfg/syscfg.h"
 #include "flash_map/flash_map.h"
