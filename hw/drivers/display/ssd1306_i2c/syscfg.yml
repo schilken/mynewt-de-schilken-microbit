@@ -22,12 +22,12 @@
 
 syscfg.defs:
 
-    SSD1306_I2C_BUS:
-        description: 'SPI bus number for the SSD1306_I2C'
-        value: -1
-    SSD1306_I2C_LOG:
-        description: 'Enable SSD1306_I2C logging'
-        value: 0
-    SSD1306_I2C_STATS:
-        description: 'Enable SSD1306_I2C statistics'
-        value: 0
+#    SSD1306_I2C_BUS:
+#        description: 'I2C bus number for the SSD1306_I2C'
+#        value: -1
+#    SSD1306_I2C_LOG:
+#        description: 'Enable SSD1306_I2C logging'
+#        value: 0
+#    SSD1306_I2C_STATS:
+#        description: 'Enable SSD1306_I2C statistics'
+#        value: 0

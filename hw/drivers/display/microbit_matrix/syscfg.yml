@@ -22,9 +22,9 @@
 
 syscfg.defs:
 
-    MICROBIT_MATRIX_LOG:
-        description: 'Enable MICROBIT_MATRIX logging'
-        value: 0
-    MICROBIT_MATRIX_STATS:
-        description: 'Enable MICROBIT_MATRIX statistics'
-        value: 0
+#    MICROBIT_MATRIX_LOG:
+#        description: 'Enable MICROBIT_MATRIX logging'
+#        value: 0
+#    MICROBIT_MATRIX_STATS:
+#        description: 'Enable MICROBIT_MATRIX statistics'
+#        value: 0
