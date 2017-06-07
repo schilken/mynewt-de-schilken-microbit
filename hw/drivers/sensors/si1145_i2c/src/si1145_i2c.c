@@ -28,9 +28,11 @@
 int init(void);
 int reset(void);
 
-bool _debug = true;
+#define I2C_BUS 0
+
+bool _debug = MYNEWT_VAL(SI1145_I2C_LOG);
 uint8_t _i2c_address = 0x60;
-uint8_t _i2c_channel = 1;
+uint8_t _i2c_channel = I2C_BUS;
 
 struct hal_i2c_master_data i2c_data;
 

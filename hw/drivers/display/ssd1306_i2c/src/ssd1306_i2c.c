@@ -10,7 +10,9 @@
 #include "ssd1306_i2c/font_8x16.h"
 #include <ssd1306_i2c/ssd1306_i2c.h>
 
-static uint8_t i2c_channel = 1;
+#define I2C_BUS 0
+
+static uint8_t i2c_channel = I2C_BUS;
 static uint8_t i2c_address = 0x3c;
 
 struct hal_i2c_master_data i2c_data;
