@@ -1,0 +1,28 @@
+
+syscfg.vals:
+    # Enable the shell task.
+    SHELL_TASK: 1
+    # Enable Console OS Ticks
+    CONSOLE_TICKS: 1
+    # Enable Console Prompt
+    CONSOLE_PROMPT: 1 
+
+    # Enable shell commands.
+    STATS_CLI: 1
+    LOG_CLI: 1
+    CONFIG_CLI: 1
+    IMGMGR_CLI: 1
+
+#    UART_0_PIN_RX: 3
+#    UART_0_PIN_TX: 2
+
+    # Include names for statistics.
+    STATS_NAMES: 1
+
+    I2C_0: 1
+
+    BUTTON_A: 1
+    BUTTON_B: 1
+
+    SI1145_ENABLED: 1
+    SI1145_I2C_LOG: 1
