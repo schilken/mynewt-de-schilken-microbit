@@ -29,6 +29,12 @@ static int oled_shell_func(int argc, char **argv) {
         return 1;
     }
 
+    if(strcmp(argv[1], "init") == 0) {
+        rc = init_oled();
+        console_printf("oled: init rc= %d\n", rc);
+        return 0;
+    }
+
     if(strcmp(argv[1], "p") == 0){
         char* argv2 = argv[2];
         if (argc > 2) {

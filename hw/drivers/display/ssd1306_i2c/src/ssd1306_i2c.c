@@ -62,6 +62,7 @@ setPositionXY(uint8_t x, uint8_t y) {
     return rc;
 }
 
+
 int send_data_byte(uint8_t byte){
     int rc;
     uint8_t command_bytes[2];
@@ -106,6 +107,15 @@ int send_command_byte(uint8_t byte){
     i2c_data.address = i2c_address;
     i2c_data.buffer = command_bytes;
     i2c_data.len = 2;
+    rc = hal_i2c_master_write(i2c_channel, &i2c_data, OS_TICKS_PER_SEC, true);
+    return rc;
+}
+
+int init_oled(){
+    int rc;
+    i2c_data.address = i2c_address;
+    i2c_data.buffer = (uint8_t*)&ssd1306_init_sequence;
+    i2c_data.len = sizeof(ssd1306_init_sequence);
     rc = hal_i2c_master_write(i2c_channel, &i2c_data, OS_TICKS_PER_SEC, true);
     return rc;
 }

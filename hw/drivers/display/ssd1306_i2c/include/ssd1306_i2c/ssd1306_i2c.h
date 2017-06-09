@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <nrf51.h>
 
+extern int init_oled();
 extern int printAtXY(uint8_t x, uint8_t y, const char s[]);
 extern int clear_screen(void);
 
