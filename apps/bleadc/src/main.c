@@ -51,9 +51,9 @@ bssnz_t os_stack_t adc_stack[ADC_STACK_SIZE];
 
 int
 adc_read_event(struct adc_dev *dev, void *arg, uint8_t etype,
-               void *buffer, int buffer_len)
-{
+               void *buffer, int buffer_len) {
     int value;
+    uint16_t chr_val_handle;
     int rc;
 
     value = adc_nrf51_driver_read(buffer, buffer_len);
@@ -62,6 +62,12 @@ adc_read_event(struct adc_dev *dev, void *arg, uint8_t etype,
     } else {
         console_printf("Error while reading: %d\n", value);
         goto err;
+    }
+    gatt_adc_value = value;
+    rc = ble_gatts_find_chr(&gatt_svr_svc_adc_uuid.u, BLE_UUID16_DECLARE(ADC_SNS_VAL), NULL, &chr_val_handle);
+//    assert(rc == 0); // this was checked too early and forced a reset loop
+    if (rc == 0) {
+        ble_gatts_chr_updated(chr_val_handle);
     }
     return (0);
     err:
@@ -159,11 +165,11 @@ bleprph_advertise(void)
     fields.name_len = strlen(name);
     fields.name_is_complete = 1;
 
-    fields.uuids16 = (ble_uuid16_t[]){
-        BLE_UUID16_INIT(GATT_SVR_SVC_ALERT_UUID)
-    };
-    fields.num_uuids16 = 1;
-    fields.uuids16_is_complete = 1;
+//    fields.uuids16 = (ble_uuid16_t[]){
+//        BLE_UUID16_INIT(GATT_SVR_SVC_ALERT_UUID)
+//    };
+//    fields.num_uuids16 = 1;
+//    fields.uuids16_is_complete = 1;
 
     rc = ble_gap_adv_set_fields(&fields);
     if (rc != 0) {

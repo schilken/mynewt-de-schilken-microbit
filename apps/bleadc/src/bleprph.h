@@ -22,6 +22,7 @@
 
 #include "log/log.h"
 #include "nimble/ble.h"
+#include "host/ble_uuid.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -39,12 +40,16 @@ extern struct log bleprph_log;
     LOG_ ## lvl(&bleprph_log, BLEPRPH_LOG_MODULE, __VA_ARGS__)
 
 /** GATT server. */
-#define GATT_SVR_SVC_ALERT_UUID               0x1811
-#define GATT_SVR_CHR_SUP_NEW_ALERT_CAT_UUID   0x2A47
-#define GATT_SVR_CHR_NEW_ALERT                0x2A46
-#define GATT_SVR_CHR_SUP_UNR_ALERT_CAT_UUID   0x2A48
-#define GATT_SVR_CHR_UNR_ALERT_STAT_UUID      0x2A45
-#define GATT_SVR_CHR_ALERT_NOT_CTRL_PT        0x2A44
+/* Sensor Data */
+/* e761d2af-1c15-4fa7-af80-b5729002b340 */
+static const ble_uuid128_t gatt_svr_svc_adc_uuid =
+        BLE_UUID128_INIT(0x40, 0xb3, 0x20, 0x90, 0x72, 0xb5, 0x80, 0xaf,
+                         0xa7, 0x4f, 0x15, 0x1c, 0xaf, 0xd2, 0x61, 0xe7);
+#define ADC_SNS_TYPE 0xDEAD
+#define ADC_SNS_STRING "Analog to Digital"
+#define ADC_SNS_VAL 0xBEAD
+
+extern uint16_t gatt_adc_value;
 
 void gatt_svr_register_cb(struct ble_gatt_register_ctxt *ctxt, void *arg);
 int gatt_svr_init(void);
