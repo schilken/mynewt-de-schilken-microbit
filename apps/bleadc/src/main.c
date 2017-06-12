@@ -39,6 +39,52 @@
 /* Application-specified header. */
 #include "bleprph.h"
 
+/* ADC */
+#include <adc/adc.h>
+#include "adc_nrf51_driver/adc_nrf51_driver.h"
+
+// /* ADC Task settings */
+#define ADC_TASK_PRIO           5
+#define ADC_STACK_SIZE          (OS_STACK_ALIGN(32))
+struct os_task adc_task;
+bssnz_t os_stack_t adc_stack[ADC_STACK_SIZE];
+
+int
+adc_read_event(struct adc_dev *dev, void *arg, uint8_t etype,
+               void *buffer, int buffer_len)
+{
+    int value;
+    int rc;
+
+    value = adc_nrf51_driver_read(buffer, buffer_len);
+    if (value >= 0) {
+        console_printf("Got %d\n", value);
+    } else {
+        console_printf("Error while reading: %d\n", value);
+        goto err;
+    }
+    return (0);
+    err:
+    return (rc);
+}
+
+static void
+adc_task_handler(void *unused)
+{
+    struct adc_dev *adc;
+    int rc;
+    /* ADC init */
+    adc = adc_nrf51_driver_get();
+    rc = adc_event_handler_set(adc, adc_read_event, (void *) NULL);
+    assert(rc == 0);
+
+    while (1) {
+        adc_sample(adc);
+        /* Wait 2 second */
+        os_time_delay(OS_TICKS_PER_SEC * 2);
+    }
+}
+
 /** Log data. */
 struct log bleprph_log;
 
@@ -276,8 +322,11 @@ main(void)
     assert(rc == 0);
 
     /* Set the default device name. */
-    rc = ble_svc_gap_device_name_set("nimble-bleprph");
+    rc = ble_svc_gap_device_name_set("ble_adc");
     assert(rc == 0);
+    os_task_init(&adc_task, "sensor", adc_task_handler,
+                 NULL, ADC_TASK_PRIO, OS_WAIT_FOREVER,
+                 adc_stack, ADC_STACK_SIZE);
 
     conf_load();
 
