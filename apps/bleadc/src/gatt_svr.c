@@ -52,6 +52,7 @@ static const ble_uuid128_t gatt_svr_chr_sec_test_static_uuid =
 static uint8_t gatt_svr_sec_test_static_val;
 
 uint16_t gatt_adc_value;
+uint16_t gatt_adc_period = 1000;
 
 static int
 gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
@@ -95,9 +96,21 @@ static int gatt_svr_sns_access(uint16_t conn_handle, uint16_t attr_handle, struc
         case ADC_SNS_VAL:
             if (ctxt->op == BLE_GATT_ACCESS_OP_WRITE_CHR) {
                 rc = gatt_svr_chr_write(ctxt->om, 0, sizeof gatt_adc_value, &gatt_adc_value, NULL);
-                return rc; } else if (ctxt->op == BLE_GATT_ACCESS_OP_READ_CHR) {
+                return rc;
+            } else if (ctxt->op == BLE_GATT_ACCESS_OP_READ_CHR) {
                 rc = os_mbuf_append(ctxt->om, &gatt_adc_value, sizeof gatt_adc_value);
-                return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES; }
+                return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
+            }
+
+        case ADC_SNS_PERIOD:
+            if (ctxt->op == BLE_GATT_ACCESS_OP_WRITE_CHR) {
+                rc = gatt_svr_chr_write(ctxt->om, 0, sizeof gatt_adc_period, &gatt_adc_period, NULL);
+                return rc;
+            } else if (ctxt->op == BLE_GATT_ACCESS_OP_READ_CHR) {
+                rc = os_mbuf_append(ctxt->om, &gatt_adc_period, sizeof gatt_adc_period);
+                return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
+            }
+
         default:
             assert(0); return BLE_ATT_ERR_UNLIKELY;
     }
@@ -136,6 +149,10 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
                         .uuid = BLE_UUID16_DECLARE(ADC_SNS_VAL),
                         .access_cb = gatt_svr_sns_access,
                         .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_NOTIFY,
+                    }, {
+                        .uuid = BLE_UUID16_DECLARE(ADC_SNS_PERIOD),
+                        .access_cb = gatt_svr_sns_access,
+                        .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
                     }, {
                             0, /* No more characteristics in this service. */
                     } },

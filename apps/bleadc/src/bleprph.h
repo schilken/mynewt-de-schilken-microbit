@@ -48,8 +48,10 @@ static const ble_uuid128_t gatt_svr_svc_adc_uuid =
 #define ADC_SNS_TYPE 0xDEAD
 #define ADC_SNS_STRING "Analog to Digital"
 #define ADC_SNS_VAL 0xBEAD
+#define ADC_SNS_PERIOD 0xBEE1
 
 extern uint16_t gatt_adc_value;
+extern uint16_t gatt_adc_period;
 
 void gatt_svr_register_cb(struct ble_gatt_register_ctxt *ctxt, void *arg);
 int gatt_svr_init(void);

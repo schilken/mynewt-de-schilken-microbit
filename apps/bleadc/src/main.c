@@ -54,23 +54,19 @@ adc_read_event(struct adc_dev *dev, void *arg, uint8_t etype,
                void *buffer, int buffer_len) {
     int value;
     uint16_t chr_val_handle;
-    int rc;
+    int rc = -1;
 
     value = adc_nrf51_driver_read(buffer, buffer_len);
     if (value >= 0) {
-        console_printf("Got %d\n", value);
+//        console_printf("Got %d\n", value);
+        gatt_adc_value = value;
+        rc = ble_gatts_find_chr(&gatt_svr_svc_adc_uuid.u, BLE_UUID16_DECLARE(ADC_SNS_VAL), NULL, &chr_val_handle);
+        if (rc == 0) {
+            ble_gatts_chr_updated(chr_val_handle);
+        }
     } else {
         console_printf("Error while reading: %d\n", value);
-        goto err;
     }
-    gatt_adc_value = value;
-    rc = ble_gatts_find_chr(&gatt_svr_svc_adc_uuid.u, BLE_UUID16_DECLARE(ADC_SNS_VAL), NULL, &chr_val_handle);
-//    assert(rc == 0); // this was checked too early and forced a reset loop
-    if (rc == 0) {
-        ble_gatts_chr_updated(chr_val_handle);
-    }
-    return (0);
-    err:
     return (rc);
 }
 
@@ -87,7 +83,7 @@ adc_task_handler(void *unused)
     while (1) {
         adc_sample(adc);
         /* Wait 2 second */
-        os_time_delay(OS_TICKS_PER_SEC * 2);
+        os_time_delay((OS_TICKS_PER_SEC * gatt_adc_period)/1000);
     }
 }
 
@@ -250,7 +246,7 @@ bleprph_gap_event(struct ble_gap_event *event, void *arg)
 
     case BLE_GAP_EVENT_ENC_CHANGE:
         /* Encryption has been enabled or disabled for this connection. */
-        BLEPRPH_LOG(INFO, "encryption change event; status=%d ",
+        BLEPRPH_LOG(DEBUG, "encryption change event; status=%d ",
                     event->enc_change.status);
         rc = ble_gap_conn_find(event->connect.conn_handle, &desc);
         assert(rc == 0);
@@ -271,7 +267,7 @@ bleprph_gap_event(struct ble_gap_event *event, void *arg)
         return 0;
 
     case BLE_GAP_EVENT_MTU:
-        BLEPRPH_LOG(INFO, "mtu update event; conn_handle=%d cid=%d mtu=%d\n",
+        BLEPRPH_LOG(DEBUG, "mtu update event; conn_handle=%d cid=%d mtu=%d\n",
                     event->mtu.conn_handle,
                     event->mtu.channel_id,
                     event->mtu.value);
