@@ -307,7 +307,7 @@ main(void)
     sysinit();
 
     /* Set initial BLE device address. */
-    memcpy(g_dev_addr, (uint8_t[6]){0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0a}, 6);
+    memcpy(g_dev_addr, (uint8_t[6]){0x0a, 0x0a, 0x0a, 0x0a, 0x0a, 0x0b}, 6);
 
     /* Initialize the bleprph log. */
     log_register("bleprph", &bleprph_log, &log_console_handler, NULL,

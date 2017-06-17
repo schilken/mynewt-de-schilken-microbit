@@ -45,17 +45,17 @@ syscfg.vals:
     CONFIG_NEWTMGR: 1
 
     # OS main/default task
-    OS_MAIN_STACK_SIZE: 428
+    OS_MAIN_STACK_SIZE: 256  # was 1024
 
     SHELL_TASK: 1
     STATS_CLI: 1
     STATS_NAMES: 1
 
-    # RAM bedarf reduzieren
-    BLE_ACL_BUF_SIZE: 128
-    MSYS_1_BLOCK_COUNT: 8
-    MSYS_1_BLOCK_SIZE: 76
-
+    # RAM reduction
+    BLE_ACL_BUF_COUNT: 2    # was 4
+    BLE_ACL_BUF_SIZE: 255  # was 255
+    MSYS_1_BLOCK_COUNT: 10  # was 12
+    MSYS_1_BLOCK_SIZE: 180 # was 292
 
     ADC_0_SCALING: NRF_ADC_CONFIG_SCALING_INPUT_ONE_THIRD
     ADC_0_INPUT: NRF_ADC_CONFIG_INPUT_2
