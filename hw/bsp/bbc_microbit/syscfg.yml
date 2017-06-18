@@ -70,6 +70,17 @@ syscfg.defs:
     I2C_0:
       description: 'enable I2C 0'
       value: 0
+    I2C_0_PIN_SDA:
+      description: 'DATA pin for I2C 0'
+      value: 30
+    I2C_0_PIN_SCL:
+      description: 'CLOCK pin for I2C 0'
+      value: 0
+    I2C_0_FREQ:
+      description: 'Frequency in Khz for I2C 0'
+      value: 100
+
+
     I2C_1:
       description: 'enable I2C 1'
       value: 0
