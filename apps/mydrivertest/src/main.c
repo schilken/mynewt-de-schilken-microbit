@@ -25,6 +25,9 @@
 #include "bsp/bsp.h"
 #include "hal/hal_gpio.h"
 #include <microbit_matrix/microbit_matrix.h>
+#include <si1145_i2c/si1145_i2c.h>
+#include <ssd1306_i2c/ssd1306_i2c.h>
+
 #ifdef ARCH_sim
 #include "mcu/mcu_sim.h"
 #endif
@@ -42,6 +45,29 @@ extern void matrix_command_init(void);
 static struct os_callout blinky_callout;
 
 static char ch = ' ';
+
+static bool oled_initilized = false;
+
+static char print_buffer[20];
+
+static void
+readAndPrintUV() {
+    uint16_t uv = readUV();
+    sprintf(print_buffer, "UV-Index: %d.%02d", uv/100, uv%100);
+    printAtXY(1, 1, print_buffer);
+}
+
+static void initOled() {
+    int rc = -1;
+    if (!oled_initilized) {
+        rc = init_oled();
+        if (rc == 0) {
+            oled_initilized = true;
+            rc = clear_screen();
+        }
+    }
+}
+
 /**
   * This function will be called when the gpio_irq_handle_event is pulled
   * from the message queue.
@@ -53,6 +79,7 @@ button_callback(struct os_event *ev)
         ch++;
         print_char(ch, FALSE);
     } else {
+        readAndPrintUV();
         print_char(ch, TRUE);
     }
 }
@@ -98,6 +125,10 @@ main(int argc, char **argv)
     oled_command_init();
     uv_command_init();
     matrix_command_init();
+    initOled();
+    printAtXY(1, 1, "UV+OLED v0.7");
+    printAtXY(1, 4, "Button B fuer  neue Messung");
+
 #if MYNEWT_VAL(BUTTON_LOG)
     log_register("button", &_log, &log_console_handler, NULL, LOG_SYSLEVEL);
 #endif
