@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <nrf51.h>
 
 #ifndef HAVE_BOOLEAN
@@ -37,7 +38,7 @@ typedef int boolean;
 extern int print_string(char* text, boolean loop);
 extern int print_char(char ch, boolean blink);
 extern int set_pixel_at_xy(uint8_t x, uint8_t y);
-
+extern bool isScrolling();
 
 #define GPIO_OF_ROW_0 (13) // muss HIGH sein. 3 bits
 #define GPIO_OF_COL_0 (4)  // muss LOW sein, damit LED leuchtet, 9 bits

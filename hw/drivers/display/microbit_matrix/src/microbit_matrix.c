@@ -218,3 +218,7 @@ int print_string(char* text, boolean loop){
     init_timer_and_gpio();
     return 0;
 }
+
+bool isScrolling() {
+    return *_current_ptr && !_loop;
+}
