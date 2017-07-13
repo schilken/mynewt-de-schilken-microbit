@@ -19,17 +19,14 @@
 
 #include <assert.h>
 #include <string.h>
-#include <stdio.h>
-#include <errno.h>
 #include "sysinit/sysinit.h"
 #include "bsp/bsp.h"
 #include "os/os.h"
-#include "bsp/bsp.h"
-#include "hal/hal_gpio.h"
 #include "console/console.h"
 #include "hal/hal_system.h"
 #include "config/config.h"
 #include "split/split.h"
+#include <microbit_matrix/microbit_matrix.h>
 
 /* BLE */
 #include "nimble/ble.h"
@@ -49,6 +46,8 @@
 struct os_task adc_task;
 bssnz_t os_stack_t adc_stack[ADC_STACK_SIZE];
 
+char buf[6];
+
 int
 adc_read_event(struct adc_dev *dev, void *arg, uint8_t etype,
                void *buffer, int buffer_len) {
@@ -58,7 +57,11 @@ adc_read_event(struct adc_dev *dev, void *arg, uint8_t etype,
 
     value = adc_nrf51_driver_read(buffer, buffer_len);
     if (value >= 0) {
-//        console_printf("Got %d\n", value);
+        if (!isScrolling()) {
+            sprintf(buf, "%4d ", value);
+            console_printf(buf);
+            rc = print_string(buf, FALSE);
+        }
         gatt_adc_value = value;
         rc = ble_gatts_find_chr(&gatt_svr_svc_adc_uuid.u, BLE_UUID16_DECLARE(ADC_SNS_VAL), NULL, &chr_val_handle);
         if (rc == 0) {
