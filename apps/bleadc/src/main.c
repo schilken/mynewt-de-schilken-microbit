@@ -57,10 +57,11 @@ adc_read_event(struct adc_dev *dev, void *arg, uint8_t etype,
 
     value = adc_nrf51_driver_read(buffer, buffer_len);
     if (value >= 0) {
+        showIntAs5Digits(value);
         if (!isScrolling()) {
             sprintf(buf, "%4d ", value);
             console_printf(buf);
-            rc = print_string(buf, FALSE);
+//            rc = print_string(buf, FALSE);
         }
         gatt_adc_value = value;
         rc = ble_gatts_find_chr(&gatt_svr_svc_adc_uuid.u, BLE_UUID16_DECLARE(ADC_SNS_VAL), NULL, &chr_val_handle);
@@ -348,6 +349,7 @@ main(void)
     }
 #endif
 
+    print_char('-', false);
     /*
      * As the last thing, process events from default event queue.
      */

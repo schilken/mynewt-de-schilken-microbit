@@ -31,6 +31,19 @@ static const char *bit_rep[16] = {
         [12] = "1100", [13] = "1101", [14] = "1110", [15] = "1111",
 };
 
+static const const uint8_t digit_pattern[10]= {
+        0b00000,
+        0b00001,
+        0b00011,
+        0b00111,
+        0b01111,
+        0b11111,
+        0b11110,
+        0b11100,
+        0b11000,
+        0b10000
+};
+
 #define FMT8BITS(byte) bit_rep[(byte) >> 4], bit_rep[(byte) & 0x0F]
 
 // erste Stelle: row
@@ -188,6 +201,29 @@ static void led_matrix_refresh() {
     if(_scroll && (ticks % 28 == 0)){
         shift_left();
     }
+}
+
+void clearPixels() {
+    for (uint8_t y = 0; y < BYTES_PER_CHAR; y++) {
+        visible_row[y] &= ~0b1111100000;            // clear lower 5 bits
+    }
+}
+
+void showIntAs5Digits(uint16_t value){
+    clearPixels();
+    for (int ix = 0; ix < 5; ix++) {
+        uint8_t columnPixels = digit_pattern[value % 10];
+        value = value / 10;
+        for(uint8_t y = 0; y < 5; y++){
+            if (columnPixels & (0x10 >> y)) {
+                visible_row[y] |= (0x20 << ix);
+            }
+        }
+    }
+    _blink_phase_on = true;
+    _scroll = FALSE;
+    _blink = false;
+    init_timer_and_gpio();
 }
 
 int set_pixel_at_xy(uint8_t x, uint8_t y){
