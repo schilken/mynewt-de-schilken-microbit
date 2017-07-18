@@ -39,5 +39,6 @@ pkg.deps:
     - "@mynewt-de-schilken-microbit/hw/drivers/display/microbit_matrix"
     - "@mynewt-de-schilken-microbit/hw/drivers/display/ssd1306_i2c"
     - "@mynewt-de-schilken-microbit/hw/drivers/sensors/si1145_i2c"
+    - "@mynewt-de-schilken-microbit/hw/drivers/display/ws2812b"
 
 
