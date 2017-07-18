@@ -76,7 +76,7 @@ static void initOled() {
 static void FUNCTION_IS_NOT_USED
 button_callback(struct os_event *ev)
 {
-    if((int)ev->ev_arg == BUTTON_A) {
+    if((int)ev->ev_arg == BUTTON_A_PIN) {
         ch++;
         print_char(ch, FALSE);
     } else {

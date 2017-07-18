@@ -84,10 +84,10 @@ syscfg.defs:
     I2C_1:
       description: 'enable I2C 1'
       value: 0
-    BUTTON_A:
+    BUTTON_A_ENABLED:
       description: 'enable Button A'
       value: 0
-    BUTTON_B:
+    BUTTON_B_ENABLED:
       description: 'enable Button B'
       value: 0
 

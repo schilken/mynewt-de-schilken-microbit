@@ -77,7 +77,7 @@ static const struct nrf51_hal_i2c_cfg hal_i2c_cfg = {
 };
 #endif
 
-#if MYNEWT_VAL(BUTTON_A | BUTTON_B)
+#if MYNEWT_VAL(BUTTON_A_ENABLED) || MYNEWT_VAL(BUTTON_B_ENABLED)
 
 /**
   * This function handles the HW GPIO interrupt and registers an event in
@@ -95,24 +95,24 @@ static FUNCTION_IS_NOT_USED void gpio_irq_handler(void *arg) {
 
 void microbit_set_button_cb(os_event_fn *ev_cb){
     button_irq_event.ev_cb = ev_cb;
-#if MYNEWT_VAL(BUTTON_A)
-    hal_gpio_irq_init(BUTTON_A,
+#if MYNEWT_VAL(BUTTON_A_ENABLED)
+    hal_gpio_irq_init(BUTTON_A_PIN,
                       gpio_irq_handler,
-                      (void*)BUTTON_A,
+                      (void*)BUTTON_A_PIN,
                       HAL_GPIO_TRIG_FALLING,
                       HAL_GPIO_PULL_UP);
     /* Enable the IRQ */
-    hal_gpio_irq_enable(BUTTON_A);
+    hal_gpio_irq_enable(BUTTON_A_PIN);
 #endif
 
-#if MYNEWT_VAL(BUTTON_B)
-    hal_gpio_irq_init(BUTTON_B,
+#if MYNEWT_VAL(BUTTON_B_ENABLED)
+    hal_gpio_irq_init(BUTTON_B_PIN,
                       gpio_irq_handler,
-                      (void*)BUTTON_B,
+                      (void*)BUTTON_B_PIN,
                       HAL_GPIO_TRIG_FALLING,
                       HAL_GPIO_PULL_UP);
     /* Enable the IRQ */
-    hal_gpio_irq_enable(BUTTON_B);
+    hal_gpio_irq_enable(BUTTON_B_PIN);
 #endif
 
 }
