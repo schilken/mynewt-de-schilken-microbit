@@ -81,6 +81,7 @@ button_callback(struct os_event *ev)
         print_char(ch, FALSE);
     } else {
         readAndPrintUV();
+        ch--;
         print_char(ch, TRUE);
     }
 }
