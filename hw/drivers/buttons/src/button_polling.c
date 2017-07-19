@@ -7,17 +7,16 @@
 #include "os/os.h"
 #include "hal/hal_gpio.h"
 #include "bsp/bsp.h"
-#include <console/console.h>
 
 /* The timer callout */
 static struct os_callout timer_callout;
 
 #if MYNEWT_VAL(BUTTON_A_ENABLED)
-static uint16_t button_A_state = 0;
+static uint8_t button_A_state = 0;
 #endif
 
 #if MYNEWT_VAL(BUTTON_B_ENABLED)
-static uint16_t button_B_state = 0;
+static uint8_t button_B_state = 0;
 #endif
 
 static struct os_event button_irq_event = {
@@ -29,21 +28,21 @@ static void timer_ev_cb(struct os_event *ev)
 {
     assert(ev != NULL);
 #if MYNEWT_VAL(BUTTON_A_ENABLED)
-    button_A_state = (button_A_state << 1) | hal_gpio_read(BUTTON_A_PIN) | 0xe000;
-    if(button_A_state == 0xf000) {
+    button_A_state = (button_A_state << 1) | hal_gpio_read(BUTTON_A_PIN) | 0xe0;
+    if(button_A_state == 0xf0) {
         button_irq_event.ev_arg = (void*)BUTTON_A_PIN;
         os_eventq_put(os_eventq_dflt_get(), &button_irq_event);
     }
 #endif
 #if MYNEWT_VAL(BUTTON_B_ENABLED)
-    button_B_state = (button_B_state << 1) | hal_gpio_read(BUTTON_B_PIN) | 0xe000;
-    if(button_B_state == 0xf000) {
+    button_B_state = (button_B_state << 1) | hal_gpio_read(BUTTON_B_PIN) | 0xe0;
+    if(button_B_state == 0xf0) {
         button_irq_event.ev_arg = (void*)BUTTON_B_PIN;
         os_eventq_put(os_eventq_dflt_get(), &button_irq_event);
     }
 #endif
 //    os_callout_reset(&timer_callout, (OS_TICKS_PER_SEC));
-    os_callout_reset(&timer_callout, (6 * OS_TICKS_PER_SEC)/1000);
+    os_callout_reset(&timer_callout, (7 * OS_TICKS_PER_SEC)/1000);
 }
 
 static void init_timer(void)
