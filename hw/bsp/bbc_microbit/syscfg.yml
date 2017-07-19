@@ -84,13 +84,6 @@ syscfg.defs:
     I2C_1:
       description: 'enable I2C 1'
       value: 0
-    BUTTON_A_ENABLED:
-      description: 'enable Button A'
-      value: 0
-    BUTTON_B_ENABLED:
-      description: 'enable Button B'
-      value: 0
-
 
 syscfg.vals:
     CONFIG_FCB_FLASH_AREA: FLASH_AREA_NFFS
