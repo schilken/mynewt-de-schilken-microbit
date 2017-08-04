@@ -5,13 +5,70 @@
 #include "syscfg/syscfg.h"
 #include <shell/shell.h>
 #include <console/console.h>
+#include "bsp/bsp.h"
+#include "os/os.h"
 #include <assert.h>
 #include <stdio.h>
+#include <microbit_matrix/microbit_matrix.h>
 
 static int adc_loop_cmd(int argc, char **argv);
 static int adc_poll_cmd(int argc, char **argv);
 
 #define ADC_MODULE "adc"
+
+/* ADC */
+#include <adc/adc.h>
+#include "adc_nrf51_driver/adc_nrf51_driver.h"
+
+// /* ADC Task settings */
+#define ADC_TASK_PRIO           5
+#define ADC_STACK_SIZE          (OS_STACK_ALIGN(32))
+struct os_task adc_task;
+bssnz_t os_stack_t adc_stack[ADC_STACK_SIZE];
+
+char buf[6];
+
+int adc_loop = 0;
+
+int
+adc_read_event(struct adc_dev *dev, void *arg, uint8_t etype,
+                                  void *buffer, int buffer_len) {
+    int value;
+    int rc = -1;
+
+    value = adc_nrf51_driver_read(buffer, buffer_len);
+    if (value >= 0) {
+        showIntAs5Digits(value);
+        if (!isScrolling()) {
+            sprintf(buf, "%4d ", value);
+            if(adc_loop){
+                console_printf(buf);
+            }
+//            rc = print_string(buf, FALSE);
+        }
+    } else {
+        console_printf("Error while reading: %d\n", value);
+    }
+    return (rc);
+}
+
+static void
+adc_task_handler(void *unused)
+{
+    struct adc_dev *adc;
+    int rc;
+    /* ADC init */
+    adc = adc_nrf51_driver_get();
+    rc = adc_event_handler_set(adc, adc_read_event, (void *) NULL);
+    assert(rc == 0);
+
+    while (1) {
+        adc_sample(adc);
+        /* Wait 2 second */
+        os_time_delay(OS_TICKS_PER_SEC * 2);
+    }
+}
+
 
 /*
  * Initialize param and command help information if SHELL_CMD_HELP
@@ -67,6 +124,9 @@ adc_commands_init(void)
 {
     int rc = shell_register(ADC_MODULE, adc_module_commands);
     assert(rc == 0);
+    os_task_init(&adc_task, "sensor", adc_task_handler,
+                 NULL, ADC_TASK_PRIO, OS_WAIT_FOREVER,
+                 adc_stack, ADC_STACK_SIZE);
 }
 
 
@@ -89,6 +149,7 @@ adc_loop_cmd(int argc, char **argv) {
             return 1;
         }
     }
+    adc_loop = onOff;
     console_printf("adc: poll %s\n", onOff == 1 ? "ON" : "OFF");
     return 0;
 }

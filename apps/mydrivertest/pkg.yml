@@ -41,5 +41,7 @@ pkg.deps:
     - "@mynewt-de-schilken-microbit/hw/drivers/sensors/si1145_i2c"
     - "@mynewt-de-schilken-microbit/hw/drivers/display/ws2812b"
     - "@mynewt-de-schilken-microbit/hw/drivers/buttons"
+    - "@mynewt-nrf51-adc-driver/libs/adc_nrf51_driver"
+    - "@mynewt-de-schilken-microbit/hw/drivers/display/microbit_matrix"
 
 
