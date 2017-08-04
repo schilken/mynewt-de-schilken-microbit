@@ -19,14 +19,17 @@
 
 #include <assert.h>
 #include <string.h>
-
+#include "syscfg/syscfg.h"
 #include "sysinit/sysinit.h"
+#include <shell/shell.h>
 #include "os/os.h"
 #include "bsp/bsp.h"
 #include "hal/hal_gpio.h"
 #include <microbit_matrix/microbit_matrix.h>
 #include <si1145_i2c/si1145_i2c.h>
 #include <ssd1306_i2c/ssd1306_i2c.h>
+#include <buttons/button_polling.h>
+
 
 #ifdef ARCH_sim
 #include "mcu/mcu_sim.h"
@@ -36,7 +39,7 @@ static volatile int g_task1_loops;
 
 int g_led_pin;
 
-extern void gpio_command_init(void);
+extern void gpio_commands_init(void);
 extern void i2c_command_init(void);
 extern void oled_command_init(void);
 extern void uv_command_init(void);
@@ -122,12 +125,13 @@ main(int argc, char **argv)
     hal_gpio_init_out(LED_ROW1, 1);
     hal_gpio_init_out(g_led_pin, 0);
     init_timer();
-    gpio_command_init();
+    gpio_commands_init();
     i2c_command_init();
     oled_command_init();
     uv_command_init();
     matrix_command_init();
     rgb_command_init();
+//    shell_register_default_module("");
     initOled();
     printAtXY(1, 1, "UV+OLED v0.7");
     printAtXY(1, 4, "Button B fuer  neue Messung");

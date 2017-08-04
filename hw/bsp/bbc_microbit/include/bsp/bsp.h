@@ -37,6 +37,8 @@ extern "C" {
 extern uint8_t _ram_start;
 #define RAM_SIZE        0x4000
 
+#define BBC_MICROBIT 1
+
 /* LED pins */
 #define LED_BLINK_PIN   (-1)
 
@@ -62,8 +64,6 @@ extern uint8_t _ram_start;
 #else
 #define FUNCTION_IS_NOT_USED
 #endif
-
-extern void microbit_set_button_cb(os_event_fn *ev_cb);
 
 /* UART info */
 #define CONSOLE_UART    "uart0"

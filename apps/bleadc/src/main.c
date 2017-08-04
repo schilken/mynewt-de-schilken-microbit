@@ -25,7 +25,11 @@
 #include "console/console.h"
 #include "hal/hal_system.h"
 #include "config/config.h"
+
+#if MYNEWT_VAL(SPLIT_LOADER)
 #include "split/split.h"
+#endif
+
 #include <microbit_matrix/microbit_matrix.h>
 
 /* BLE */
@@ -60,7 +64,7 @@ adc_read_event(struct adc_dev *dev, void *arg, uint8_t etype,
         showIntAs5Digits(value);
         if (!isScrolling()) {
             sprintf(buf, "%4d ", value);
-            console_printf(buf);
+//            console_printf(buf);
 //            rc = print_string(buf, FALSE);
         }
         gatt_adc_value = value;

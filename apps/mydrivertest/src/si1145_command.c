@@ -2,9 +2,9 @@
 // Created by Alfred Schilken on 29.05.17.
 //
 
+#include "syscfg/syscfg.h"
 #include <shell/shell.h>
 #include <console/console.h>
-#include "syscfg/syscfg.h"
 #include <assert.h>
 #include <stdio.h>
 #include <si1145_i2c/si1145_i2c.h>

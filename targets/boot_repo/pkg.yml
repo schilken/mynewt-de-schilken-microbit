@@ -1,0 +1,7 @@
+### Package: targets/mydrivertest_repo
+pkg.name: "targets/boot_repo"
+pkg.type: "target"
+pkg.description: bootloader fuer microbit 
+pkg.author: alfred schilken
+pkg.homepage: 
+

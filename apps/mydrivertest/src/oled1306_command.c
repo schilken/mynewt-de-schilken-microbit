@@ -2,11 +2,13 @@
 // Created by Alfred Schilken on 28.05.17.
 //
 
+#include "syscfg/syscfg.h"
 #include <shell/shell.h>
 #include <console/console.h>
 #include <assert.h>
 #include <stdio.h>
 #include <hal/hal_i2c.h>
+#include <buttons/button_polling.h>
 #include <ssd1306_i2c/ssd1306_i2c.h>
 
 static int oled_shell_func(int argc, char **argv);
